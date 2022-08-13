@@ -1,7 +1,9 @@
 import sys
 input=sys.stdin.readline
-#sys.stdin=open('input.txt')
 
+#홀짝 겹치면 NO하고 다 빠져나오기
+#당연히 확인해야하는거 삼각형, 오각형
+#주의해야하는거 사각형, 분리집합
 T=int(input())
 
 for test_case in range(T):
