@@ -7,6 +7,6 @@ for i in range(len(B)):
     for j in range(len(A)):
         if B[i]==A[j]:
             DP[i+1][j+1]=DP[i][j]+1
-            rst=max(DP[i+1][j+1],rst)
+    rst=max(max(DP[i+1]),rst)
 
 print(rst)
