@@ -1,8 +1,15 @@
 import sys
 input=sys.stdin.readline
+#분류를 눌러본게 잘못이지.... LIS인걸 알면 쉬움..
+#잘라야하는게 왼쪽의 번호가 기준이므로
+#왼쪽 번호를 수열로 둔다.
+#즉 정렬을 오른쪽 번호 기준으로 한다.
+#다시 말해 오른쪽 1번, 2번, 3번....에 연결된 점들에 대해서 LIS를 찾자
+#그 다음 최장 수열을 찾고, 거기에 없는 값들을 출력
+#다만 아래의 코드는 LIS코드로써는 다소 부적합하다.
+#-> 다른 플래티넘 LIS 문제에서 시간이나 메모리초과가 뜬다.
 
 N=int(input())
-#현재 가장 정확?
 L=[list(map(int,input().split())) for i in range(N)]
 L.sort(key= lambda x:x[1])
 L=[i[0] for i in L]
