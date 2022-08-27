@@ -30,16 +30,13 @@ for test_case in range(T):
     N = int(input())
     if N==0:
         input()
-        L=[]
+        L=deque([])
     else:
         L = deque(input().strip('[]\n').split(','))
 
 
     V = True #True면 왼쪽, False면 오른쪽
     n = oper.count("D")
-    if n>N:
-        print('error')
-        continue
     for i in oper:
         if i=="R":
             V= not V
@@ -49,6 +46,14 @@ for test_case in range(T):
                 L.popleft()
             else:
                 L.pop()
-    if not V:
-        L.reverse()
-    print(L)
+                
+    if L.left>L.right:
+        print('error')
+    else:
+        if not V:
+            L.reverse()
+        print(L)                
+                
+
+
+
