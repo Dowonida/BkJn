@@ -1,3 +1,4 @@
+from collections import deque
 import sys
 input=sys.stdin.readline
 
@@ -11,7 +12,7 @@ for test_case in range(T):
         input()
         L=[]
     else:
-        L = list(map(int,input().strip('[]\n').split(',')))
+        L = deque(list(map(int,input().strip('[]\n').split(','))))
 
 
     V = True #True면 왼쪽, False면 오른쪽
@@ -25,9 +26,10 @@ for test_case in range(T):
 
         else:
             if V:
-                L.pop(0)
+                L.popleft()
             else:
                 L.pop()
+    L=list(L)
     if not V:
         L=L[::-1]
     print(str(L).replace(' ',''))
