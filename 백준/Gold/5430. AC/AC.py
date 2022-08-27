@@ -51,4 +51,4 @@ for test_case in range(T):
                 L.pop()
     if not V:
         L.reverse()
-    print(str(L).replace(' ',''))
+    print(L)
