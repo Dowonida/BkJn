@@ -1,6 +1,26 @@
-from collections import deque
 import sys
 input=sys.stdin.readline
+
+class deque:
+    def __init__(self,List):
+        self.val=List
+        self.left=0
+        self.right=len(List)
+
+    def __repr__(self):
+        return '['+','.join(self.val[self.left:self.right])+']'
+
+    def popleft(self):
+        self.left+=1
+    def pop(self):
+        self.right-=1
+
+    def reverse(self):
+        self.val=[ self.val[i] for i in range(self.right-1,self.left-1,-1)]
+        self.left=0
+        self.right=len(self.val)
+
+        
 
 T=int(input())
 
@@ -12,7 +32,7 @@ for test_case in range(T):
         input()
         L=[]
     else:
-        L = deque(list(map(int,input().strip('[]\n').split(','))))
+        L = deque(input().strip('[]\n').split(','))
 
 
     V = True #True면 왼쪽, False면 오른쪽
@@ -29,7 +49,6 @@ for test_case in range(T):
                 L.popleft()
             else:
                 L.pop()
-    L=list(L)
     if not V:
-        L=L[::-1]
+        L.reverse()
     print(str(L).replace(' ',''))
