@@ -36,7 +36,6 @@ for test_case in range(T):
 
 
     V = True #True면 왼쪽, False면 오른쪽
-    n = oper.count("D")
     for i in oper:
         if i=="R":
             V= not V
