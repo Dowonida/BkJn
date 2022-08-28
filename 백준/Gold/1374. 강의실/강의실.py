@@ -1,4 +1,7 @@
 from heapq import heappop, heappush, heapify
+import sys
+input=sys.stdin.readline
+
 N= int(input())
 
 C = [0]*N
@@ -7,8 +10,6 @@ for i in range(N):
     a,b,c=map(int,input().split())
     M.append((b,c))
 heapify(M)
-
-rst=1#최소한 1개는 있어야지
 stack=[0]
 
 while M:
@@ -19,5 +20,5 @@ while M:
     else:
         heappush(stack,i[1])
         heappush(stack,a)
-        rst=max(rst,len(stack))
-print(rst)
+
+print(len(stack))
