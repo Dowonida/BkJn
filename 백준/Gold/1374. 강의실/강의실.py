@@ -9,7 +9,7 @@ M = []
 for i in range(N):
     a,b,c=map(int,input().split())
     M.append((b,c))
-heapify(M)
+M.sort(key=lambda x:x[0])#시작시간 정렬
 stack=[0]
 
 while M:
