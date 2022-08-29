@@ -31,7 +31,8 @@ for test_case in range(T):
             dic[a][b]=min(dic[a][b],c)
             
     flag=True
-    for i in start:
+    for i in start:#혹시나 전부 연결그래픈가? 싶었지만 역시 아니네 
+                    #start에서 아무거나 하나만 가져와서 돌리니까 틀렸다고 뜸
         if flag==False:
             break
         visited={j: [10000000,0] for j in range(1,N+1)}#거리와 카운트
