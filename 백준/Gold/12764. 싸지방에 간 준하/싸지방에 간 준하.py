@@ -37,9 +37,9 @@ def edit(node,val):
         
 def find(s,e,node):#나보다 작은게 무조건 있는경우만 함
                     #s보다 작은 값을 찾아서 e로 바꿈 
-    if node>=size:#리프노드 도달했으면 
-        edit(node-size,e) #고쳐야되는 노드 번호 
-        cs[node-size]+=1 #해당 노드를 거쳐간 사람 수 
+    if node>=size:
+        edit(node-size,e)
+        cs[node-size]+=1
         return
     if seg[node*2]<=s:#왼쪽이 작은 경우
         find(s,e,node*2)
@@ -58,13 +58,11 @@ seg={i:2000000 for i in range(size*2)}
 #k번 노드는 size+k번임 즉 range(size,2*size)범위 
 #seg는 종료지점을 저장하고 있다.
 
-H=[]
-for i in range(N):
-    heappush(H,tuple(map(int,input().split())))
+H=sorted([tuple(map(int,input().split())) for i in range(N)])
+
     
 cs=[]
-while H:
-    s,e=heappop(H)
+for s,e in H:
     if s<seg[1]:#가장 작아서 새 노드 필요
         edit(len(cs),e)
         cs.append(1)#자리 하나 추가->기본 카운트1
