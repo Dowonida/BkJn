@@ -16,12 +16,14 @@ for i in range(M):
 
 s, e = map(int,input().split())
 
-visited=[0]*(N+1)
+#visited=[0]*(N+1)
+visited=set(range(1,N+1))
 dist=[1e10]*(N+1)
 prev=[-1]*(N+1)
 
 
-visited[s]=1
+#visited[s]=1
+visited.remove(s)
 dist[s]=0
 for i in dic[s]:
     dist[i]=dic[s][i]
@@ -30,8 +32,8 @@ for i in dic[s]:
 for i in range(N-1):
     Nidx=-1
     Ndist=1e10
-    for j in range(1,N+1):
-        if visited[j]==0 and Ndist>=dist[j]:
+    for j in visited:
+        if Ndist>=dist[j]:
             #연결이 끊어져 있을 수가 있다.
             #그런 경우 해당 노드는 마지막까지 남게되고
             #dist[j]는 초기값 1e10에서 갱신되지 않는다.(낮아지지 않는다.)
@@ -41,9 +43,10 @@ for i in range(N-1):
             Nidx=j
             Ndist=dist[j]
 
-    visited[Nidx]=1
+    #visited[Nidx]=1
+    visited.remove(Nidx)
     for j in dic[Nidx]:
-        if visited[j]==0 and dist[Nidx]+dic[Nidx][j]<dist[j]:
+        if j in visited and dist[Nidx]+dic[Nidx][j]<dist[j]:
             prev[j]=Nidx
             dist[j]=dist[Nidx]+dic[Nidx][j]
 
