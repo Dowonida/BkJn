@@ -12,7 +12,8 @@ def solution(operations):
             answer.append(b)
         elif a=='D':
             if flag==False:
-                answer.sort()
+                answer=sorted(answer[idx:])
+                idx=0
                 flag=True
             if idx<len(answer):
                 if b==-1:
@@ -27,3 +28,4 @@ def solution(operations):
             
             
     return answer
+
