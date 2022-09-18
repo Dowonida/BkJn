@@ -1,24 +1,24 @@
 import sys
 input=sys.stdin.readline
-sys.setrecursionlimit(20000)
-
-def func(L):
-    if len(L)<2:
-        return L
-    a=L[0]
-    for i in range(1,len(L)):
-        if L[i]>a:
-            break
-    else:
-        i+=1
-    return func(L[1:i])+func(L[i:])+[a]
 
 
-L=[]
+RST=[]
+STK=[(0,1e7,1e7)]
 while True:
     try:
-        L.append(int(input()))
+        a=int(input())
+        
+        while not(STK[-1][0]<a<STK[-1][2]):
+            RST.append(STK.pop()[1])
+        if a>STK[-1][1]:
+            STK.append((STK[-1][1],a,STK[-1][2]))
+        else:
+            STK.append((STK[-1][0],a,STK[-1][1]))
+            
+        
     except:
         break
-print(*func(L))
-
+while len(STK)>1:
+    RST.append(STK.pop()[1])
+for i in RST:
+    print(i)
