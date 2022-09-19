@@ -8,6 +8,6 @@ def solution(m, n, puddles):
         for j in range(1,n+1):
             if [i,j] in puddles:
                 continue
-            DP[i][j]+=DP[i-1][j]+DP[i][j-1]
+            DP[i][j]=(DP[i][j]+DP[i-1][j]+DP[i][j-1])%1000000007
     
-    return DP[-1][-1]%1000000007
+    return DP[-1][-1]
