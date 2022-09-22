@@ -1,10 +1,10 @@
 # [level 3] 광고 삽입 - 72414 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72414?language=python3) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/72414?language=python3#) 
 
 ### 성능 요약
 
-메모리: 12.4 MB, 시간: 29.32 ms
+메모리: 12.3 MB, 시간: 29.18 ms
 
 ### 구분
 

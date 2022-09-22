@@ -17,20 +17,15 @@ def num_to_time(num):
         c='0'+c
     return a+':'+b+':'+c
 def solution(play_time, adv_time, logs):
-    answer = 0
-    Max_length=time_to_num(play_time) #만약 10분이면: 길이가0부터 600까지니까 601이어야함
+    Max_length=time_to_num(play_time) 
     length=time_to_num(adv_time)
-    
-    DP=[0]*(2+Max_length) #누적합 인덱스는 10분이면 0~601임
+    DP=[0]*(2+Max_length) 
     for i in logs:
         a,b=map(time_to_num,i.split('-'))
         DP[a]+=1
         DP[b]-=1
     for i in range(1,Max_length+1):
         DP[i]+=DP[i-1]
-
-    
-    #answer=sum(DP[:length]) #인덱스 [0:9) LEN=10
     answer=sum( DP[:length] )
     now=answer
     idx=0
@@ -39,9 +34,4 @@ def solution(play_time, adv_time, logs):
         if now>answer:
             answer=now
             idx=i
-    print(answer)
-    print(num_to_time(answer))
-    
     return num_to_time(idx)
-
-#print(solution(	"50:00:00", "50:00:00", ["15:36:51-38:21:49", "10:14:18-15:36:51", "38:21:49-42:51:45"]))
