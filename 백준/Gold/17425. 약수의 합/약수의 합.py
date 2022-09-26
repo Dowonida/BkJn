@@ -8,9 +8,10 @@ for i in range(2,(M+1)):
     while i*j<=M:
         DP[i*j]+=i
         j+=1
+    DP[i]+=DP[i-1]
 
-for i in range(1,M+1):
-    SUM[i]=SUM[i-1]+DP[i]
+#for i in range(1,M+1):
+ #   SUM[i]=SUM[i-1]+DP[i]
 t=int(input())
 for _ in range(t):
-    print(SUM[int(input())])
+    print(DP[int(input())])
