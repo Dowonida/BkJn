@@ -6,7 +6,7 @@ N=int(input())
 #current [2]는 차가 같은 친구들이다. 즉 좌상단에서 우하단으로 가는 대각선이다.
 #체스판은 대칭이므로 0행에서 반까지의 경우의 수만 확인하고 *2를 하면 된다.(홀수일 경우는 +1)
 
-def DFS(current,stack):#current는 i,i+stack,i-stack
+def DFS(stack):#current는 i,i+stack,i-stack
     global score
 
     if stack==N:
@@ -14,23 +14,36 @@ def DFS(current,stack):#current는 i,i+stack,i-stack
         return 0
     
     for i in range(N):
-        if i not in current[0] and i+stack not in current[1] and i-stack not in current[2]:
-            current[0].append(i)
-            current[1].append(i+stack)
-            current[2].append(i-stack)
-            DFS(current,stack+1)
-            current[0].pop()
-            current[1].pop()
-            current[2].pop()
+        if M[i]*L[i+stack]*R[i-stack]:
+            M[i]=0
+            L[i+stack]=0
+            R[i-stack]=0
+            DFS(stack+1)
+            M[i]=1
+            L[i+stack]=1
+            R[i-stack]=1
     
 
 
 
 
 score=0
+M=[1]*N
+L=[1]*2*N
+R=[1]*2*N
 for i in range(N//2):
-    DFS([[i],[i],[i]],1)
+    M[i]=0
+    L[i]=0
+    R[i]=0
+    DFS(1)
+    M[i]=1
+    L[i]=1
+    R[i]=1
+    
 score*=2
 if N%2:
-    DFS([[N//2],[N//2],[N//2]],1)
+    L[N//2]=0
+    R[N//2]=0
+    M[N//2]=0
+    DFS(1)
 print(score)
