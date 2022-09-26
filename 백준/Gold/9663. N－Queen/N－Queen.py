@@ -1,10 +1,8 @@
 N=int(input())
 
-
-
-
 def DFS(current,stack):#current는 i,i+stack,i-stack
     global score
+
     if stack==N:
         score+=1
         return 0
@@ -23,5 +21,9 @@ def DFS(current,stack):#current는 i,i+stack,i-stack
 
 
 score=0
-DFS([[],[],[]],0)
+for i in range(N//2):
+    DFS([[i],[i],[i]],1)
+score*=2
+if N%2:
+    DFS([[N//2],[N//2],[N//2]],1)
 print(score)
