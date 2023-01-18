@@ -37,6 +37,7 @@ for _ in range(E):
 #정식 DFS를 해야해서 조금 번거롭긴 함 
 rst = [0]*(V+1) #단절여부
 visited = [0]*(V+1)
+adjidx = [0]*(V+1)
 
 for i in range(1,V+1):
     if visited[i]:
@@ -47,12 +48,16 @@ for i in range(1,V+1):
     while stk:
         a = stk[-1]
 
-        for b in adj[a]:
+        while adjidx[a]<len(adj[a]):
+            b = adj[a][adjidx[a]]
+            adjidx[a] += 1
+        #for b in adj[a]:
             if visited[b] == 0:
                 visited[b] = visited[a]+1
                 stk.append(b)
                 cnt += (a==i)
                 break
+                
         else:
             if len(stk)>1:
                 p = stk[-2]
@@ -63,7 +68,7 @@ for i in range(1,V+1):
                 if visited[a]>=visited[p]:
                     rst[p] = 1
             stk.pop()
-        #print(a,visited,stk)
+
         rst[i] = int(cnt>1)
 
         
