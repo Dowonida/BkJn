@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 N = int(input())+1
 
 seg = [0]*(N+1)+list(map(int,input().split()))
