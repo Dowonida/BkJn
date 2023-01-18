@@ -57,8 +57,6 @@ for i in range(1,V+1):
             if len(stk)>1:
                 p = stk[-2]
                 for b in adj[a]:
-                    if b == p:
-                        continue
                     visited[a] = min (visited[a],visited[b])
                 if visited[a]>=visited[p]:
                     rst[p] = 1
