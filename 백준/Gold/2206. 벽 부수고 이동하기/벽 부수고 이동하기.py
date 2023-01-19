@@ -1,37 +1,37 @@
 import sys
-input=sys.stdin.readline
+
+input = sys.stdin.readline
 
 
-M, N = map(int,input().split())
-Map=[[2]*(N+2)]
+def sol2206():
+    n, m = map(int, input().split())
+    board = [list(input().rstrip()) for _ in range(n)]
+    nw = {'0', '2'}
+    q = [(0, 0, 2)]
+    answer = 1
+    while q:
+        nq = []
+        for r, c, w in q:
+            if r == n - 1 and c == m - 1:
+                return answer
+            
+            for nr, nc in [(r-1, c), (r, c+1), (r+1, c), (r, c-1)]:
+                if 0 <= nr < n and 0 <= nc < m and board[nr][nc]!='3':
+                    if w == 1:
+                        if board[nr][nc] == '0':
+                            board[nr][nc] = '2'
+                            nq.append((nr, nc, 1))
+                    else:
+                        if board[nr][nc] == '1':
+                            nq.append((nr, nc, 1))
+                        elif board[nr][nc] in nw:
+                            nq.append((nr, nc, 2))
+                        board[nr][nc] = '3'
+        answer += 1
+        q = nq
+    return -1
 
-for i in range(M):
-    Map.append([2]+list(map(int,list(input().strip())))+[2])
-Map.append([2]*(N+2))
 
-visited=[[0]*(N+2) for i in range(M+2)]
-visited[1][1]=2
-#미방문 0
-#망치방문 1
-#그냥방문 2 => 망치보다 작은 값이면 망치값으로 변경
+if __name__ == '__main__':
+    print(sol2206())
 
-
-cnt=1
-que=[(1,1,2)]#2가 망치 있는거=>1인 벽을 부술 수 있음 
-vector=[(-1,0),(1,0),(0,1),(0,-1)]
-while visited[M][N]==0 and que:
-
-    nextque=[]
-    for i in range(len(que)):
-        for j in vector:
-            nx,ny=que[i][0]+j[0],que[i][1]+j[1]#다음 좌표
-            if visited[nx][ny]<que[i][2] and Map[nx][ny]<que[i][2]:#갈 수 있으면
-                visited[nx][ny]=que[i][2]
-                nextque.append((nx,ny,que[i][2]-Map[nx][ny]))
-
-    que=nextque
-    cnt+=1
-if visited[-2][-2]==0:
-    print(-1)
-else:
-    print(cnt)
