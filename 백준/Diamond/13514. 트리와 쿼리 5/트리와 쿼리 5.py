@@ -1,125 +1,140 @@
 import sys
-from heapq import heappush, heappop
+from heapq import heappop, heappush
+
 input = sys.stdin.readline
-sys.setrecursionlimit(200000)
 
+N = int(input()) #노드의 수
 
-N = int(input())
-parent = [0]*(N+1)
-sonnum = [0]*(N+1)
-depth = [0]*(N+1)
-
-sons = [ set() for _ in range(N+1)]
 adj = [ [] for _ in range(N+1)]
+
 for _ in range(N-1):
     a,b = map(int,input().split())
     adj[a].append(b)
     adj[b].append(a)
 
 
-def upson(node = 1, d=1):
-    sonnum[node] = 1
-    depth[node] = d
+#재귀로 돌릴 때 visited 없는 dfs가 가능한데
+#반복문으로도 해보자.
 
-    for i in adj[node]:
-        if sonnum[i]:
-            continue
-        sons[node].add(i)
-        parent[i] = node
-        sonnum[node] += upson(i,d+1)
+sons = [0]*(N+1)
+nidx = [0]*(N+1)
+stk= [0,1]
+parent = [0] *(N+1)
+depth = [0]*(N+1)
+depth[1] = 1
+cent_p = [0]*(N+1) #센트로이드부모
+while stk:
+    cur = stk[-1]
 
-    return sonnum[node]
+    if nidx[cur] == len(adj[cur]):
+        sons[cur] += 1 #자신
+        stk.pop()
 
-centp = [0]*(N+1)
-upson()
-
-def centing(node,p=0, ): #p는 이전센트
-
-    snum = sonnum[node] #이번 서브트리 노드 수
-
-    cent = node
-    while True:
-
-        for i in sons[cent]:
-            if sonnum[i] > snum//2:
-                
-
-                sons[cent].remove(i)
-                sons[i].add(cent)
-                
-                sonnum[cent] -= sonnum[i]
-                sonnum[i] = snum
-                cent = i
-                break
+    else:
+        nxt = adj[cur][nidx[cur]]
+        if nxt == stk[-2]:
+            nidx[cur] += 1
+        elif sons[nxt]:
+            sons[cur] += sons[nxt]
+            nidx[cur] += 1
         else:
-            break
+            stk.append(nxt)
+            parent[nxt] = cur
+            depth[nxt] = depth[cur] + 1
 
-    centp[cent] = p
-    for i in sons[cent]:
-        centing(i,cent)
-
-centing(1)
-
-parent = [ parent]
-Max = 1
-while Max:
-    Max = 0
-    cnt = []
+parent = [parent]
+flag = 1
+while flag:
+    flag = 0
+    pcnt = []
     for i in range(N+1):
         pp = parent[-1][parent[-1][i]]
-        cnt.append(pp)
-        Max = max(Max,pp)
-    if Max:
-        parent.append(cnt)
+        pcnt.append(pp)
+        flag = max(flag,pp)
+    if flag:
+        parent.append(pcnt)
 LP = len(parent)
-def LCA(a,b):
-    if depth[a]>depth[b]:
-        a,b = b,a #b가 더 깊음
-    diff = depth[b]-depth[a]
-    for i in range(LP):
-        if diff & (1<<i):
-            b = parent[i][b]
+stk = [1]
 
-    for i in range(LP-1,-1,-1):
-        if parent[i][a] != parent[i][b]:
-            a,b = parent[i][a], parent[i][b]
-    if a!=b:
-        return parent[0][a]
-    return a
+while stk:
+    cur = stk.pop()
+    snum = sons[cur] #이번 서브트리에서 처리할 전체 노드 수
+    pcp = cent_p[cur]
+    while True:
 
-def dist(a,b):
-    lca = LCA(a,b)
-    return depth[a]+depth[b]- 2*depth[lca]
+        for nxt in adj[cur]:
+            if sons[nxt]>snum:
+                continue
+            if sons[nxt]>snum//2:
+                sons[cur] -= sons[nxt]
+                sons[nxt] = snum
+                cent_p[nxt] = pcp
+                cur = nxt
+                break
+        else: #cur이 이번 루트로 당첨 
+            break
 
-Max = 200000
-violins = {0}
-Violin = [[(Max,0)] for _ in range(N+1)]
+    
+    for nxt in adj[cur]:
+        if sons[nxt]>snum:
+            continue
+        cent_p[nxt] = cur
+        stk.append(nxt)
 
+Max = 200000 #최대 거리
+is_white = {0}
+white = [ [(Max,0)] for _ in range(N+1)] #거리,노드
 for _ in range(int(input())):
     a,b = map(int,input().split())
     if a== 1:
-        if b in violins:
-            violins.remove(b)
-            continue
-        violins.add(b)
-        cur = b
-        while cur:
-            heappush( Violin[cur], ( dist(cur,b),b))
-            cur = centp[cur]
-        
+        if b in is_white:
+            is_white.remove(b)
+        else:
+            is_white.add(b)
+            cur = b
+            while cur: #b가 더 깊다.
+                dcur, db = cur, b #거리구하기 위한 임시 값
+                if depth[cur]>depth[b]:
+                    dcur, db = db, dcur
+                diff = depth[db] - depth[dcur]
+                for i in range(LP):
+                    if diff&(1<<i):
+                        db = parent[i][db]
+                for i in range(LP-1,-1,-1):
+                    if parent[i][db] != parent[i][dcur]:
+                        db, dcur = parent[i][db], parent[i][dcur]
+                if db!= dcur:
+                    db = parent[0][db]
+                D = depth[b] + depth[cur] - 2*depth[db]
+
+                heappush(white[cur],(D,b))
+                cur = cent_p[cur]
     else:
         rst = Max
         cur = b
         while cur:
-            while Violin[cur][0][1] not in violins:
-                heappop(Violin[cur])
-            rst = min(rst, Violin[cur][0][0]+dist(cur,b))
-            cur = centp[cur]
+            dcur, db = cur, b
+            if depth[cur]>depth[b]:
+                dcur, db = db, dcur
+            diff = depth[db] - depth[dcur]
+            for i in range(LP):
+                if diff&(1<<i):
+                    db = parent[i][db]
+            for i in range(LP-1,-1,-1):
+                if parent[i][db] != parent[i][dcur]:
+                    db, dcur = parent[i][db], parent[i][dcur]
+            if db != dcur:
+                db = parent[0][db]
+            D = depth[b] + depth[cur] - 2*depth[db]
 
+            while white[cur][0][1] not in is_white:
+                heappop(white[cur])
+
+            rst = min(rst, D+white[cur][0][0])
+            cur = cent_p[cur]
         if rst == Max:
             print(-1)
         else:
             print(rst)
-        
-        
-    
+            
+
