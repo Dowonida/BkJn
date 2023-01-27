@@ -1,5 +1,6 @@
 import sys
 input = sys.stdin.readline
+
 #각 간선마다 위로 노드 수, 밑으로 노드 수
 #위 노드 수 * 아래 노드 수 + 아래 노드수C2 를 전부 더하면 됨
 
@@ -16,52 +17,36 @@ input = sys.stdin.readline
 
 N = int(input())
 adj = [ [] for _ in range(N+1)]
-sons = [1]*(N+1)
-parent = [0]*(N+1)
+sons = [0]*(N+1)
+#parents = [0]*(N+1)
 for i in range(N-1):
     a,b = map(int,input().split())
     adj[a].append(b)
     adj[b].append(a)
 
 stk = [1]
-stk2 = []
-#리프노드까지 부모 저장하며 내려감
-#루트노드까지 부모에 더해주며 올라옴
+# sons도 계산하기 위해서 DFS는 정석으로 돈다.
+# 즉 한 번에 모든 자식을 추가하지 않고,
+# 자식을 처리한 다음에 부모도 방문을 한다.
+# 팝은 자식이 전부 처리된 이후에 한다.
+# 이를 위해선 재귀함수가 좋다.
+# 그럼 깊이는 30만.... 좀 슬프네
 
-parent[1]= 1
-
-while stk:
-    me = stk.pop()
-    leaf = True
-    for i in adj[me]:
-        
-        if parent[i]:
+def DFS(node=1,parent=0):
+    rst = 1
+    #parents[node]=parent
+    for i in adj[node]:
+        if i == parent:
             continue
-        leaf = False
-        parent[i] = me
-        stk.append(i)
-    if leaf:
-        stk2.append(me)
-    
+        rst += DFS(i,node)
+    sons[node] = rst
 
-visited = [1]*(N+1)
-while stk2:
+    return rst
 
-    i = stk2.pop()
-    p = parent[i]
-    if visited[i] == len(adj[i]):
-        sons[p] += sons[i]
-        visited[p] += 1
-        stk2.append(p)
-
-
-
-
-
+DFS(1)
 rst = 0
 for i in range(2,N+1):
     inner = sons[i]
     outer = N-inner
     rst += inner*outer + (inner*(inner-1))//2
 print(rst)
-
