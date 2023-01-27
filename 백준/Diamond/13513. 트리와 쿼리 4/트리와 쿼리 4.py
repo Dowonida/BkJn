@@ -147,6 +147,7 @@ while stk:
 
 radius = [ (i,i) for i in range(N+1)]
 Answer[0] = Max
+H = [(Max,0)]
 def updateAnswer(node):
     rst = []
     for i in cent_s[node]:
@@ -163,7 +164,8 @@ def updateAnswer(node):
         Answer[node] = 0
     else:
         Answer[node] = rst[0][0]+rst[1][0]
-        radius[node] = (rst[0][1],rst[1][1]) #양 끝 
+        radius[node] = (rst[0][1],rst[1][1]) #양 끝
+    heappush(H,(Answer[node],node))
 
 for i in range(1,N+1):
     updateAnswer(i)
@@ -202,7 +204,9 @@ for _ in range(int(input())):
 
 
     else:
-        rst = min(Answer)
+        while H[0][0] != Answer[H[0][1]]:
+            heappop(H)
+        rst = H[0][0]
         if rst == Max:
             print(-1)
         else:
