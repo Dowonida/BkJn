@@ -5,12 +5,26 @@ import bisect
 N = int(input())
 L = list(map(int,input().split()))
 
-stk = []
-
+stk = [-10000000000]
+cnt = 1
 for i in L:
-    idx = bisect.bisect_left(stk,i)
-    if idx == len(stk):
+
+    if i>stk[-1]:
         stk.append(i)
-    else:
-        stk[idx] = i
-print(len(stk))
+        if cnt<len(stk):
+            cnt *= 2
+        continue
+    idx = cnt
+    rst = 0
+    while idx:
+        nrst = rst + idx
+        if nrst >= len(stk):
+            idx //= 2
+        elif stk[nrst-1]>=i:
+            idx //= 2
+        else:
+            rst += idx
+    stk[rst] = i
+    
+    #print(stk)
+print(len(stk)-1)
