@@ -12,12 +12,12 @@ def getDist(a,b):
         if diff&(1<<i):
             rst += dist[i][a]
             a = parent[i][a]
-
-    for i in range(LP-1,-1,-1):
-        if parent[i][a] != parent[i][b]:
-            rst += dist[i][a] + dist[i][b]
-            a, b = parent[i][a], parent[i][b]
     if a!=b:
+        for i in range(LP-1,-1,-1):
+            if parent[i][a] != parent[i][b]:
+                rst += dist[i][a] + dist[i][b]
+                a, b = parent[i][a], parent[i][b]
+    
         rst += dist[0][a]+dist[0][b]
     return rst
     

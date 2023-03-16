@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 414436 KB, 시간: 3912 ms
+메모리: 414572 KB, 시간: 3548 ms
 
 ### 분류
 
-centroid(centroid), 센트로이드 분할(centroid_decomposition), 자료 구조(data_structures), 분할 정복(divide_and_conquer), 트리(trees)
+자료 구조, 트리, 분할 정복, 센트로이드, 센트로이드 분할
 
 ### 문제 설명
 
