@@ -46,8 +46,6 @@ while stk:
 
 sons.pop()
 cent_p = parent.copy()
-
-
 stk = [cur]
 while stk:
     cur = stk.pop()
@@ -68,8 +66,6 @@ while stk:
                 stk.append(son)
             break
 
-      
-
 parent = [parent]
 dist = [dist]
 while True:
@@ -86,8 +82,6 @@ while True:
         dist.append(new_d)
     else:
         break
-
-
 
 
 def Dist(a,b):
@@ -112,9 +106,6 @@ def Dist(a,b):
         rst+=dist[0][a]+dist[0][b]
     return rst
 
-
-#blue_dist = [0]*N
-#blue_count = [0]*N
 blue_dist = [{i:0 for i in cent_s[j]} for j in range(N)]
 blue_count = [{i:0 for i in cent_s[j]} for j in range(N)]
 isblue = set()
@@ -152,5 +143,3 @@ for _ in range(int(input())):
             prev = cur
             cur = cent_p[cur]
         print(rst)
-            
-            
