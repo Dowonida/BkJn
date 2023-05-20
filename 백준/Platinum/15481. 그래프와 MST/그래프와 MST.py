@@ -18,7 +18,6 @@ mst만들기
 '''
 U=list(range(N+1)) #대표노드
 E = [ tuple(map(int,input().split())) for _ in range(M)] #간선 리스트
-H = sorted(E,key = lambda x: x[2])
 def find(a):
     if a != U[a]:
         a = find(U[a])
@@ -34,7 +33,7 @@ def union(a,b):
 
 S = 0
 adj = [ [] for _ in range(N+1)]
-for a,b,w in H:
+for a,b,w in sorted(E, key = lambda x: x[2]):
     if union(a,b):
         adj[a].append((b,w))
         adj[b].append((a,w))
