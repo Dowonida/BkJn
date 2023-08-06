@@ -38,16 +38,23 @@ L, R 쿼리에 대하여
 
     그런데 어차피 R+(R+1)이 있는지는 in set으로 찾으면 되니까
     굳이 튜플로 이중연산하지말고 합으로 하자.
+
+    **무지성 세그먼트였다.
+    누적합이 더 간단하다.
+    왜 세그->누적합으로의 어려울까
+    누적합으로 한다면 어떻게 할까
+    a, a+1중에서 a+1에 저장하는게 더 좋을 것 같다.
+    그럼 L, R이 주어졌을 때 R-L을 하면 되니까
 '''
 
-Max = 1024*1024
+Max = 1000001
 factor = list(range(Max))
 prime = []
 half_prime = []
 for i in range(2,Max):
     if factor[i] == i:
         prime.append(i)
-        half_prime.append(i//2)
+        half_prime.append(i//2+1)
     for j in prime:
         k = i*j
         if k>=Max:
@@ -58,22 +65,11 @@ for i in range(2,Max):
 prime = set(prime)
 half_prime = set(half_prime)
 
-seg = [0]*Max+[ (i in half_prime) for i in range(Max)]
-for i in range(Max-1,0,-1):
-    seg[i] = seg[2*i]+seg[2*i+1]
+S = [0]*Max
+for i in range(1,Max):
+    S[i] = S[i-1]+(i in half_prime)
+    
 
 for _ in range(int(input())):
-    L, R = map(int,input().split())
-    s, e = L+Max, R+Max+1
-    rst = -(R in half_prime)
-    while s<e:
-        if s%2:
-            rst += seg[s]
-            s += 1
-        if e%2:
-            e -= 1
-            rst += seg[e]
-        s //= 2
-        e //= 2
-            
-    print(rst)
+    L,R = map(int,input().split())
+    print(S[R]-S[L])
