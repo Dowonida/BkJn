@@ -50,11 +50,11 @@ L, R 쿼리에 대하여
 Max = 1000001
 factor = list(range(Max))
 prime = []
-half_prime = []
+S = [0]*Max
 for i in range(2,Max):
     if factor[i] == i:
         prime.append(i)
-        half_prime.append(i//2+1)
+        S[i//2+1]=1
     for j in prime:
         k = i*j
         if k>=Max:
@@ -62,13 +62,9 @@ for i in range(2,Max):
         factor[k] = j
         if i%j==0:
             break
-prime = set(prime)
-half_prime = set(half_prime)
 
-S = [0]*Max
 for i in range(1,Max):
-    S[i] = S[i-1]+(i in half_prime)
-    
+    S[i] = S[i-1]+S[i]
 
 for _ in range(int(input())):
     L,R = map(int,input().split())
