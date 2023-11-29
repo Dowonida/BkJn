@@ -6,22 +6,17 @@ while True:
         break
 
     rst = 0
-    Map = [ set() for _ in range(25)]
-    Map[a].add(b)
-    if a == 0:
-        Map[25]
-        continue
+    cnt = 1 #점의 개수 
+    Map = [ [] for _ in range(25)]
+    Map[a].append(b)
     while True:
         a,b = map(int,input().split())
         if a==0:
             break
-        
-        Map[a].add(b)
-    for i in range(25):
-        Map[i] = sorted(Map[i])
-    cnt = 0
-    for i in range(25):
-        cnt += len(Map[i])
+        cnt += 1
+        Map[a].append(b)
+    for m in Map:
+        m.sort()
 
     while cnt:
         rst += 1
