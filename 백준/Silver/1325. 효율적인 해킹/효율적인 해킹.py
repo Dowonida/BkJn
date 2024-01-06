@@ -1,31 +1,35 @@
 import sys
-input=sys.stdin.readline
-N, M= map(int,input().split())
+input = sys.stdin.readline
 
-cnt=0
-dic={i:set() for i in range(1,N+1)}
+N, M = map(int,input().split())
+
+rst = [0]*(N+1)
+
+adj = [[] for _ in range(N+1)]
 for i in range(M):
-    a, b = map(int,input().split())
-    dic[b].add(a)
+    a,b = map(int,input().split())
+    adj[a].append(b)
 
 
 for i in range(1,N+1):
-    visited=[0]*(N+1)
-    visited[i]=1
-    stack=[i]
+    stk = [i]
+    visited = [0]*(N+1)
+    visited[i] = 1
+    while stk:
+        cur = stk.pop()
+        rst[cur] += 1
+        for nxt in adj[cur]:
+            if visited[nxt]:
+                continue
+            visited[nxt] = 1
+            stk.append(nxt)
     
-    while stack:
-        a = stack.pop()
-        for j in dic[a]:
-            if visited[j]==0:
-                visited[j]=1
-                stack.append(j)
-    R = sum(visited)
-    if R>cnt:
-        cnt=R
-        rst=[i]
-    elif R==cnt:
-        rst.append(i)
-print(*rst)
-    
-    
+Max = 0
+RST = []
+for i, num in enumerate(rst):
+    if num == Max:
+        RST.append(i)
+    elif num>Max:
+        Max = num
+        RST = [i]
+print(*RST)
