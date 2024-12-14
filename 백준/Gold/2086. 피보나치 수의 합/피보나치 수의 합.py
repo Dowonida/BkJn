@@ -1,74 +1,65 @@
-dic={0:[1,0,0,1],1:[1,1,1,0]}
-def fipow(n):#A는 그냥 1차원배열
-    if n in dic:
-        return dic[n]
+'''
+a_n까지의 합을 Sn이라고 하자.
+그럼 S_(n+1) = Sn+a_(n+1)이고
+a_(n+1) = a_n + a_(n-1) = (Sn-S_(n-1)) + (S_(n-1)-S_(n-2)) = S_n - S_(n-2)이다.
+따라서 S_(n+1) = 2*S_n - S_(n-2)이다.
+
+이를 행렬로 나타내어 거듭제곱을  해보면
+(S_n, -S_(n-2), -S_(n-1))을 (S_k, S_(k-1), S_(k-2))와 내적하면
+S_(n+k)가 나오는 것을 알 수 있다. (직접 행렬을 만들어서 거듭제곱해보자.)
+따라서 S_k, S_(k-1), S_(k-2)를 가지고 있으면 2배씩 뛰어갈 수 있다.
+
+하지만, S_(k-1), S_(k-2)도 n칸 전진시키기 위해서는
+S_(k-3), S_(k-4)도 필요하다.
+
+따라서 S_k, S_(k-1),S_(k-2)를 가지고, S_(k-3), S_(k-4)도 구할 수 있어야 한다.
+이는 최초의 식인 S_(n+1) = 2*S_n - S_(n-2)로부터 구해낼 수 있다.
+
+S_(k) = 2*S_(k-1) - S_(k-3)
+S_(k-3) = 2*S_(k-1)-S_(k)
+S_(k-4)는 위의 식에서 인덱스만 하나씩 내리기 
+
+'''
+
+dic = {-2:0, -1:0, 0:1, 1:2, 2:4}
+div = 1000000000
 
 
-    elif n//2 in dic:
-        dic[n]=[dic[n//2][0]*dic[n//2][0]+dic[n//2][1]*dic[n//2][2],
-                dic[n//2][0]*dic[n//2][1]+dic[n//2][1]*dic[n//2][3],
-                dic[n//2][2]*dic[n//2][0]+dic[n//2][2]*dic[n//2][3],
-                dic[n//2][2]*dic[n//2][1]+dic[n//2][3]*dic[n//2][3]]
-        for i in range(4):
-            dic[n][i]%=1000000000
-        return dic[n]
+a,b = map(int,input().split())
 
-def matp(A,B):
-    a= [A[0]*B[0]+A[1]*B[2],
-                A[0]*B[1]+A[1]*B[3],
-                A[2]*B[0]+A[3]*B[2],
-                A[2]*B[1]+A[3]*B[3]]
-    for i in range(4):
-        a[i]%=1000000000
-    return a
+N = b.bit_length()
 
-def matp2(n,m):
-    if n==0:
-        return dic[m]
-    A=dic[n]
-    B=dic[m]
-    a= [A[0]*B[0]+A[1]*B[2],
-                A[0]*B[1]+A[1]*B[3],
-                A[2]*B[0]+A[3]*B[2],
-                A[2]*B[1]+A[3]*B[3]]
-    for i in range(4):
-        a[i]%=1000000000
-    return a
+def jump(a0,a1,a2,n):
+    a3 = 2*a1-a0
 
-m,N=map(int,input().split())
-m,N=min(m,N),max(m,N)
-n=1
-n2=1
-N+=2
-m+=1
+    b0 = dic[n]
+    b1 = dic[n-1]
+    b2 = dic[n-2]
+    b3 = 2*b1-b0
 
-while n<=N:
-    fipow(n)
-    n*=2
-lst=[]
-cnt=1
-while N:
-    lst.append(N%2*cnt)
-    N//=2
-    cnt*=2
-A=dic[lst.pop(0)]
-while lst:
-    A=matp(A,dic[lst.pop(0)])
-
+    return ((a0*b0-a2*b1-a1*b2)%div,
+            (a0*b1-a2*b2-a1*b3)%div,
+            (a1*b1-a3*b2-a2*b3)%div)
     
-    
-while n2<=N:
-    fipow(n2)
-    n*=2
-lst2=[]
-cnt=1
-while m:
-    lst2.append(m%2*cnt)
-    m//=2
-    cnt*=2
-B=dic[lst2.pop(0)]
-while lst2:
-    B=matp(B,dic[lst2.pop(0)])
-        
-    
-print((A[0]-A[3]-B[0]+B[3])%1000000000)
+
+for i in range(2,N):
+    n = 1<<i
+
+    idx = n//2
+    a0, a1, a2 = dic[idx], dic[idx-1], dic[idx-2]
+    dic[n], dic[n-1], dic[n-2] = jump(a0,a1,a2,idx)
+
+
+def get(n):
+    if n in dic and n-1 in dic and n-2 in dic:
+        return dic[n], dic[n-1], dic[n-2]
+
+    max_bit = (n.bit_length()-1)
+    J = 1<<max_bit
+    a0, a1, a2 = get(n- J)
+    return jump(a0,a1,a2,J)
+
+
+B = get(b)[1]
+A = get(a)[2]
+print((B-A)%div)
